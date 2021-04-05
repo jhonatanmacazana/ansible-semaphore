@@ -2,30 +2,41 @@ version: "3.3"
 
 services:
   ansible-web:
-    command: /usr/local/bin/semaphore -config /etc/semaphore/config.json
+    build: .
     container_name: ansible-web
     depends_on:
       ansible-db:
         condition: service_healthy
-    image: ansiblesemaphore/semaphore:v2.6.8
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_HOSTNAME
+      - MYSQL_USERNAME
+      - MYSQL_PASSWORD
+      - MYSQL_PORT
+      - WEB_ROOT
+      - OUTPUT_DIR
+      - ADMIN_USERNAME
+      - ADMIN_EMAIL
+      - ADMIN_DESC
+      - ADMIN_PASSWORD
+    image: ansible/ansible-web
     ports:
-      - "7000:3000"
+      - "${WEB_PORT}:3000"
     volumes:
-      - "./config.json:/etc/semaphore/config.json"
+      - "${PLAYBOOK_PATH}:/home/semaphore/playbooks"
+      - "./.ssh:/home/semaphore/.ssh:ro"
 
   ansible-db:
     command: --default-authentication-plugin=mysql_native_password
     container_name: ansible-db
     environment:
-      - MYSQL_DATABASE=semaphore
-      - MYSQL_USER=semaphore
-      - MYSQL_PASSWORD=my-secret-pw
-      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
     image: mysql:8.0.23
-    ports:
-      - "7100:3306"
     restart: unless-stopped
