@@ -1,4 +1,4 @@
-# ansible-semaphore
+# docker-ansible-semaphore
 
 Installation of instances with `docker-compose`
 
