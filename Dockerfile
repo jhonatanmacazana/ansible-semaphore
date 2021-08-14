@@ -1,4 +1,4 @@
-FROM ansiblesemaphore/semaphore:v2.6.8
+FROM ansiblesemaphore/semaphore:v2.7.1
 
 ENV MYSQL_DATABASE=semaphore
 ENV MYSQL_HOSTNAME=localhost

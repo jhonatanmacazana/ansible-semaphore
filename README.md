@@ -6,7 +6,7 @@ Installation of instances with `docker-compose`
 
 2. Modify your credentials as needed.
 
-``` bash
+```bash
 # This variable points to the playbook path from the HOST machine
 PLAYBOOK_PATH=123
 
